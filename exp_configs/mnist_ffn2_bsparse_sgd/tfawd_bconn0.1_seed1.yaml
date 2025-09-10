@@ -1,0 +1,32 @@
+experiment: {name: tfawd_bconn0.1_seed1, output_dir: trained_models/mnist/ffn2_bsparse/,
+  seed: 1, deterministic: true}
+data: {dataset: mnist, dataset_path: null, target_size: 28, num_workers: 0}
+model:
+  architecture: ffnnet
+  mode:
+    type: tfa
+    options:
+      constrain_weights: false
+      init: xavier
+      gradient_clip: false
+      expand_ratio: 10
+      hidden_dimensions: [512, 512]
+      nonlinearity: relu
+      b_conn_density: 0.1
+      w_conn_density: 1
+  pretrained: false
+  loss_function: {name: cross_entropy}
+training:
+  hyperparameters: {epochs: 40, batch_size: 64}
+  optimizer: {type: SGD, lr: 0.01, weight_decay: 0.03, momentum: 0.9}
+  lr_scheduler:
+    type: multistep_lr
+    gamma: 0.5
+    milestones: [20, 30]
+  wd_scheduler:
+    type: multistep_wd
+    gamma: 0.003
+    milestones: [0]
+  metrics: {top_k: 5, display_iterations: 500, layer_alignment: true, weight_ratio: true}
+infrastructure: {gpus: 0}
+evaluation: true

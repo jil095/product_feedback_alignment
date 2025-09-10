@@ -1,0 +1,58 @@
+# Experiment Information
+experiment:
+  name: "backpropagation"
+  output_dir: "trained_models/imagenet/resnet18/"
+  # For reproducibility
+  seed: 2021
+  deterministic: true
+
+# Dataset
+data:
+  dataset: "imagenet"
+  dataset_path: "path/to/ImageNet"
+  target_size: 224
+  num_workers: 0
+
+# Model
+model:
+  architecture: "resnet18"
+  mode:
+    type: "backpropagation"
+    options:
+      constrain_weights: false
+      init: "xavier"
+      gradient_clip: false
+
+  pretrained: false
+  # checkpoint:
+  loss_function:
+    name: "cross_entropy"
+
+# Training Parameters
+training:
+  hyperparameters:
+    epochs: 75
+    batch_size: 256
+
+  optimizer:
+    type: "SGD"
+    lr: 0.1
+    weight_decay: 0.0001
+    momentum: 0.9
+
+  lr_scheduler:
+    type: "multistep_lr"
+    gamma: 0.1
+    milestones: [20, 40, 60]
+
+  metrics:
+    top_k: 5
+    display_iterations: 500
+    layer_alignment: true
+    weight_ratio: true
+
+# Infrastructure
+infrastructure:
+  gpus: 0
+
+evaluation: true
